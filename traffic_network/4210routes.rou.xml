@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2022-12-25 17:16:58 by Eclipse SUMO netedit Version 1.15.0
+<!-- generated on 2022-12-25 17:26:32 by Eclipse SUMO netedit Version 1.15.0
 -->
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
@@ -12,26 +12,12 @@
     <route id="approach3_left" edges="-201894096#2 -834006812#2 -885173795#2 -627181818"/>
     <route id="approach3_right" edges="-201894096#2 -834006812#2 834006814#0"/>
     <!-- Vehicles, persons and containers (sorted by depart) -->
-    <vehicle id="super" depart="0.00" color="red" route="approach2_left"/>
-    <vehicle id="v_0" depart="1.00" route="approach2_left"/>
-    <vehicle id="v_1" depart="2.00" route="approach2_left"/>
-    <vehicle id="v_10" depart="3.00" route="approach2_left"/>
-    <vehicle id="v_11" depart="4.00" route="approach1_right"/>
-    <vehicle id="v_12" depart="5.00" route="approach2_straight"/>
-    <vehicle id="v_13" depart="6.00" route="approach1_straight"/>
-    <vehicle id="v_14" depart="0.00" route="approach1_right"/>
-    <vehicle id="v_15" depart="1.00" route="approach3_left"/>
-    <vehicle id="v_16" depart="2.00" route="approach3_right"/>
-    <vehicle id="v_17" depart="3.00" route="approach1_right"/>
-    <vehicle id="v_18" depart="1.00" route="approach2_straight"/>
-    <vehicle id="v_19" depart="1.00" route="approach1_straight"/>
-    <vehicle id="v_2" depart="10.00" route="approach2_left"/>
-    <vehicle id="v_20" depart="9.00" route="approach1_straight"/>
-    <vehicle id="v_3" depart="10.00" route="approach2_left"/>
-    <vehicle id="v_4" depart="20.00" route="approach2_left"/>
-    <vehicle id="v_5" depart="30.00" route="approach2_left"/>
-    <vehicle id="v_6" depart="10.00" route="approach2_left"/>
-    <vehicle id="v_7" depart="4.00" route="approach2_left"/>
-    <vehicle id="v_8" depart="8.00" route="approach2_left"/>
-    <vehicle id="v_9" depart="9.00" route="approach2_left"/>
+    <flow id="f1" begin="0.00" route="approach1_straight" end="3600.00" vehsPerHour="900.00"/>
+    <flow id="f2" begin="0.00" route="approach1_right" end="3600.00" vehsPerHour="900.00"/>
+    <flow id="f3" begin="0.00" route="approach2_straight" end="3600.00" vehsPerHour="900.00"/>
+    <flow id="f4" begin="0.00" route="approach2_left" end="3600.00" vehsPerHour="900.00"/>
+    <flow id="f5" begin="0.00" route="approach3_left" end="3600.00" vehsPerHour="900.00"/>
+    <flow id="f6" begin="0.00" route="approach3_right" end="3600.00" vehsPerHour="900.00"/>
+
+    <vehicle id="super" depart="10.00" color="red" route="approach2_left"/>
 </routes>
