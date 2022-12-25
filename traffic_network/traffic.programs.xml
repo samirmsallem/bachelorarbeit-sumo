@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2022-12-24 15:51:29 by Eclipse SUMO netedit Version 1.15.0
+<!-- generated on 2022-12-25 17:13:53 by Eclipse SUMO netedit Version 1.15.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
 
     <input>
-        <sumo-net-file value="/Users/mobility/Documents/Bachelorarbeit/simulation/osm.net.xml.gz"/>
+        <sumo-net-file value="/Users/mobility/Documents/Bachelorarbeit/simulation/traffic_network/intersection4210.net.xml"/>
     </input>
 
     <output>
-        <output-file value="/Users/mobility/Documents/Bachelorarbeit/simulation/osm.net.xml.gz"/>
+        <output-file value="/Users/mobility/Documents/Bachelorarbeit/simulation/traffic_network/intersection4210.net.xml"/>
         <output.street-names value="true"/>
     </output>
 
@@ -30,16 +30,20 @@
         <walkingareas value="0"/>
     </pedestrian>
 
+    <netedit>
+        <route-files value="/Users/mobility/Documents/Bachelorarbeit/simulation/traffic_network/4210routes.rou.xml"/>
+    </netedit>
+
 </configuration>
 -->
 
 <additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
-    <tlLogic id="GS_7785471452" type="actuated" programID="0" offset="0">
-        <phase duration="38" state="GggrrrGGg" minDur="5" maxDur="50"/>
-        <phase duration="3" state="yggrrryyy"/>
-        <phase duration="6" state="GGGrrrrrr" minDur="5" maxDur="50"/>
-        <phase duration="3" state="yyyrrrrrr"/>
-        <phase duration="37" state="rrrGGgGrr" minDur="5" maxDur="50"/>
-        <phase duration="3" state="rrryyyyrr"/>
+    <tlLogic id="intersection" type="static" programID="0" offset="0">
+        <phase duration="38" state="GgrrrGGg"/>
+        <phase duration="3" state="ygrrryyy"/>
+        <phase duration="6" state="GGrrrrrr"/>
+        <phase duration="3" state="yyrrrrrr"/>
+        <phase duration="37" state="rrGGgGrr"/>
+        <phase duration="3" state="rryyyyrr"/>
     </tlLogic>
 </additional>

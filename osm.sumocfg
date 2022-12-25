@@ -3,8 +3,8 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
-        <net-file value="traffic_network/osm.net.xml.gz"/>
-        <route-files value="traffic_network/osm.passenger.trips.xml"/>
+        <net-file value="traffic_network/intersection4210.net.xml"/>
+        <route-files value="traffic_network/4210routes.rou.xml"/>
         <additional-files value="traffic_network/osm.poly.xml.gz"/>
     </input>
 
