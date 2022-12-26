@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- generated on 2022-12-26 14:34:57 by Eclipse SUMO GUI Version 1.15.0
+-->
+
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
         <net-file value="../traffic_network/osm.net.xml.gz"/>
-       <!-- Routes <route-files value="../traffic_network/routes.rou.xml"/> --> 
+        <route-files value="../traffic_network/routes.rou.xml"/>
         <additional-files value="../traffic_network/osm.poly.xml.gz"/>
     </input>
 
@@ -22,6 +25,10 @@
         <duration-log.statistics value="true"/>
         <no-step-log value="true"/>
     </report>
+
+    <traci_server>
+        <remote-port value="52244"/>
+    </traci_server>
 
     <gui_only>
         <gui-settings-file value="osm.view.xml"/>
