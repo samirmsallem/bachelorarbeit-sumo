@@ -1,8 +1,7 @@
 import requests
-import json
 
 
-def perform_request(latitude, longitude, bearing):
+def perform_request(latitude, longitude, bearing, speed=50):
     url = "http://localhost:8080/api/predictions"
 
     headers = {
@@ -12,8 +11,8 @@ def perform_request(latitude, longitude, bearing):
     body = {
         "latitude": latitude,
         "longitude": longitude,
-        "direction": bearing,
-        "currentSpeed": "50",
+        "direction": bearing, 
+        "currentSpeed": speed,
         "considerTraffic": "false",
         "asTurns": "false"
     }
@@ -53,7 +52,7 @@ def extract_tli(signals):
 def pretty_print_tli(phases):
     print("Received program for approach signal head:")
     for phase in phases:
-        print(phase[0] + " phase for " + str(phase[1]) + "seconds. Confidence: " + str(phase[2]) + "%")
+        print(phase[0] + " phase for " + str(phase[1]) + " seconds. Confidence: " + str(phase[2]) + "%")
 
 
 def main():
