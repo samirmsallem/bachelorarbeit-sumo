@@ -1,4 +1,5 @@
 from api.rest import client
+from api.misc import logger
 
 def extract_tli(signals):
     phases = []
@@ -18,18 +19,18 @@ def extract_tli(signals):
 
 def pretty_print_tli(phases):
     for phase in phases:
-        print(phase[0] + " phase for " + str(phase[1]) + " seconds. Confidence: " + str(phase[2]) + "%")
+        logger.print(phase[0] + " phase for " + str(phase[1]) + " seconds. Confidence: " + str(phase[2]) + "%")
 
 
 def get_approach_signal(approachId):
     if approachId == 1:
-        print("###### Approach 1 ######")
+        logger.print("###### Approach 1 ######")
         return extract_tli(client.perform_request(48.76280618764156, 11.427623411273599, 105.4492514593)["signals"])
     elif approachId == 2:
-        print("###### Approach 2 ######")
+        logger.print("###### Approach 2 ######")
         return extract_tli(client.perform_request(48.763513657462475, 11.431514833553978, 235.909123032)["signals"])
     else:
-        print("###### Approach 3 ######")
+        logger.print("###### Approach 3 ######")
         return extract_tli(client.perform_request(48.758733700993886, 11.425519395220782, 40.2685517938)["signals"])
 
 
