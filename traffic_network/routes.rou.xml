@@ -5,12 +5,12 @@
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
     <!-- Routes -->
-    <route id="approach1_left" edges="-749560273 -749560261 749560262 749560263#0 749560274#0 885513468#0"/>
+    <route id="approach1_left" edges="-749560273 -749560261 749560262 approach_1 749560274#0 885513468#0"/>
     <route id="approach1_right" edges="-749560273 -749560261 749560262 749560264#0 -1023430509"/>
     <route id="approach2_right" edges="-32350852#1 749560269#0 749560268 749560261 749560273"/>
-    <route id="approach2_straight" edges="-32350852#1 -749560274#2 -749560275 -1023430509"/>
-    <route id="approach3_left" edges="877649796 749560275 1023430508 749560268 749560261 749560273"/>
-    <route id="approach3_straight" edges="877649796 749560275 749560274#0 885513468#0"/>
+    <route id="approach2_straight" edges="-32350852#1 approach_2 -749560275 -1023430509"/>
+    <route id="approach3_left" edges="877649796 approach_3 1023430508 749560268 749560261 749560273"/>
+    <route id="approach3_straight" edges="877649796 approach_3 749560274#0 885513468#0"/>
     <!-- Vehicles, persons and containers (sorted by depart) -->
     <vehicle id="super1" depart="0.00" route="approach1_left"/>
     <vehicle id="super2" depart="0.00" route="approach2_straight"/>

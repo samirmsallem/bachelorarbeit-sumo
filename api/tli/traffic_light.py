@@ -1,5 +1,5 @@
 from api.rest import client
-from api.misc import logger
+from api.output import logger
 
 def extract_tli(signals):
     phases = []
