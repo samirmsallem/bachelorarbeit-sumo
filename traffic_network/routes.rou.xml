@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2022-12-26 14:32:55 by Eclipse SUMO netedit Version 1.15.0
--->
+<!-- Definition of all routes and vehicles within the simulation -->
 
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
     <!-- Routes -->
@@ -12,15 +11,21 @@
     <route id="approach3_left" edges="877649796 approach_3 1023430508 749560268 749560261 749560273"/>
     <route id="approach3_straight" edges="877649796 approach_3 749560274#0 885513468#0"/>
     <!-- Vehicles, persons and containers (sorted by depart) -->
-    <vehicle id="super1" depart="0.00" route="approach1_left"/>
-    <vehicle id="super2" depart="0.00" route="approach2_straight"/>
-    <vehicle id="super3" depart="0.00" route="approach3_left"/>
-    <!-- uncommented until glosa is working
-    <flow id="f_0" begin="0.00" route="approach3_straight" end="3600.00" vehsPerHour="400.00"/>
-    <flow id="f_1" begin="0.00" route="approach3_left" end="3600.00" vehsPerHour="1000.00"/>
-    <flow id="f_2" begin="0.00" route="approach2_straight" end="3600.00" vehsPerHour="500.00"/>
-    <flow id="f_3" begin="0.00" route="approach2_right" end="3600.00" vehsPerHour="300.00"/>
-    <flow id="f_4" begin="0.00" route="approach1_left" end="3600.00" vehsPerHour="699.98"/>
-    <flow id="f_5" begin="0.00" route="approach1_right" end="3600.00" vehsPerHour="500.00"/>
-    -->
+
+    <flow id="f_0" begin="0.00" route="approach3_straight" end="3600.00" vehsPerHour="200.00"/>
+    <flow id="f_1" begin="0.00" route="approach3_left" end="3600.00" vehsPerHour="100.00"/>
+    <flow id="f_2" begin="0.00" route="approach2_straight" end="3600.00" vehsPerHour="200.00"/>
+    <flow id="f_3" begin="0.00" route="approach2_right" end="3600.00" vehsPerHour="100.00"/>
+    <flow id="f_4" begin="0.00" route="approach1_left" end="3600.00" vehsPerHour="100.00"/>
+    <flow id="f_5" begin="0.00" route="approach1_right" end="3600.00" vehsPerHour="100.00"/>
+
+    <flow id="super_1" begin="0.00" color="blue" route="approach1_left" end="3600.00" vehsPerHour="100.00"/>
+    <flow id="super_2" begin="0.00" color="blue" route="approach2_straight" end="3600.00" vehsPerHour="100.00"/>
+    <flow id="super_3" begin="0.00" color="blue" route="approach3_left" end="3600.00" vehsPerHour="100.00"/>
+        <!-- 
+    <vehicle id="super1" color="red" depart="0.00" route="approach1_left"/>
+    <vehicle id="super2" color="red" depart="0.00" route="approach2_straight"/>
+    <vehicle id="super3" color="red" depart="0.00" route="approach3_left"/>
+        -->
+    
 </routes>
