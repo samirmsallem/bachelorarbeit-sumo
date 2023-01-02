@@ -19,9 +19,3 @@ Simulation zur Bachelorarbeit
 - Approach 1 (links): latitude=48.76280618764156, longitude=11.427623411273599, direction=105.4492514593
 - Approach 2 (geradeaus): latitude=48.763513657462475, longitude=11.431514833553978, direction=235.909123032
 - Approach 3 (geradeaus, links): latitude=48.758733700993886, longitude=11.425519395220782, direction=40.2685517938
-
-
-
-## Charts
-
-<iframe src="simulation-output/glosa-improved-speed.html">
