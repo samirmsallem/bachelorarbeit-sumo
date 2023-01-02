@@ -1,3 +1,4 @@
+from sumolib import checkBinary 
 from api.sim import manager as simulation_manager
 import os
 import sys
@@ -10,4 +11,4 @@ else:
     sys.exit("'SUMO_HOME' var not defined")
 
 if __name__ == "__main__":
-    simulation_manager.start_simulation("config/osm.sumocfg")
+    simulation_manager.start_simulation(checkBinary('sumo-gui'), "simulation/config/osm.sumocfg")
