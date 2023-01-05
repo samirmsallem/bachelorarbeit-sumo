@@ -10,7 +10,7 @@
     <route id="approach2_straight" edges="-32350852#1 approach_2 -749560275 -1023430509"/>
     <route id="approach3_left" edges="877649796 approach_3 1023430508 749560268 749560261 749560273"/>
     <route id="approach3_straight" edges="877649796 approach_3 749560274#0 885513468#0"/>
-    <!-- Vehicles, persons and containers (sorted by depart) 
+    
 
     <flow id="f_0" begin="0.00" route="approach3_straight" end="3600.00" vehsPerHour="200.00"/>
     <flow id="f_1" begin="0.00" route="approach3_left" end="3600.00" vehsPerHour="100.00"/>
@@ -18,11 +18,12 @@
     <flow id="f_3" begin="0.00" route="approach2_right" end="3600.00" vehsPerHour="100.00"/>
     <flow id="f_4" begin="0.00" route="approach1_left" end="3600.00" vehsPerHour="100.00"/>
     <flow id="f_5" begin="0.00" route="approach1_right" end="3600.00" vehsPerHour="100.00"/>
-
+<!-- Vehicles, persons and containers (sorted by depart) 
     <flow id="super_1" begin="0.00" color="blue" route="approach1_left" end="3600.00" vehsPerHour="100.00"/>
     <flow id="super_2" begin="0.00" color="blue" route="approach2_straight" end="3600.00" vehsPerHour="100.00"/>
+    --> 
     <flow id="super_3" begin="0.00" color="blue" route="approach3_left" end="3600.00" vehsPerHour="100.00"/>
-    -->    
+       
     <vehicle id="super1" color="red" depart="0.00" route="approach1_left"/>
     <!-- 
     <vehicle id="super2" color="red" depart="0.00" route="approach2_straight"/>

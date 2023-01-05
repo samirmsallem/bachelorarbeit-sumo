@@ -1,8 +1,8 @@
 import traci
 import sys
 import threading
-from api.tli import traffic_light as traffic_light_manager
-from api.tli import glosa as glosa_manager
+from api.v2i import traffic_light as traffic_light_manager
+from api.v2i import glosa as glosa_manager
 from api.output import logger,plotter
 from api.sim import helper
 
@@ -16,8 +16,8 @@ def move_according_to_glosa(vehicle):
         angle = traci.vehicle.getAngle(vehicle)
 
         speed, decision = glosa_manager.glosa_for_position(lat, lon, angle, 30)
-        print("###### Vehicle " + vehicle + " ######")
-        print("Calculated speed: " + str(speed) + " km/h with recommendation: " + decision)
+        logger.printlog("###### Vehicle " + vehicle + " ######")
+        logger.printlog("Calculated speed: " + str(speed) + " km/h with recommendation: " + decision)
         traci.vehicle.setSpeed(vehicle, speed / 3.6)
     else:
         traci.vehicle.setSpeed(vehicle, -1)
@@ -38,14 +38,13 @@ def run_sim():
 
         if(step > 0 and step % 3 == 0): # handle vehicles following green light optimal speed advisory (glosa)
             for vehicle in helper.get_super_vehicles():
-                t = threading.Thread(target=move_according_to_glosa, args=(vehicle))
-                t.start()
+                move_according_to_glosa(vehicle)
 
         if(step > 0):
             plot_data.append(traci.vehicle.getSpeed('super1'))
             plotter.plot_queue.put(plot_data[:])  # add the data to the queue   
 
-        logger.print("Next traffic signal event in " + str(ttc) + "seconds.")       
+        logger.printlog("Next traffic signal event in " + str(ttc) + "seconds.")       
 
         traci.simulationStep()
 

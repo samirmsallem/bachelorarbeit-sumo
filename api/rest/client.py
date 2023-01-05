@@ -13,7 +13,7 @@ def perform_request(latitude, longitude, bearing, speed=50):
         "longitude": longitude,
         "direction": bearing, 
         "currentSpeed": speed,
-        "considerTraffic": "false",
+        "considerTraffic": "false", # disabled as this would take the traffic information from the google api (not reliable in simulation)
         "asTurns": "false"
     }
 
