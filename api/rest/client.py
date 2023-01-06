@@ -1,4 +1,5 @@
 import requests
+import sys
 
 
 def perform_request(latitude, longitude, bearing, speed=50):
@@ -17,10 +18,15 @@ def perform_request(latitude, longitude, bearing, speed=50):
         "asTurns": "false"
     }
 
-    response = requests.post(url, headers=headers, json=body)
+    try: 
+        response = requests.post(url, headers=headers, json=body)
 
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print("Request failed with status code: ", response.status_code, response.json())
-        return None
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print("Request failed with status code: ", response.status_code, response.json())
+            return None
+
+    except ConnectionError as e:
+       print(e.args[0].reason.errno) 
+       sys.exit("Unable to perform request to local backend")
