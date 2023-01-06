@@ -3,8 +3,10 @@ import sys
 import threading
 from api.v2i import traffic_light as traffic_light_manager
 from api.v2i import glosa as glosa_manager
+from api.v2v import communication as v2v_client
 from api.output import logger,plotter
 from api.sim import helper
+from api.sim import visualizer
 
 
 plot_data = []
@@ -16,6 +18,7 @@ def move_according_to_glosa(vehicle):
         angle = traci.vehicle.getAngle(vehicle)
 
         speed, decision = glosa_manager.glosa_for_position(lat, lon, angle, 30)
+        visualizer.create_glosa_polyline(vehicle)
         logger.printlog("###### Vehicle " + vehicle + " ######")
         logger.printlog("Calculated speed: " + str(speed) + " km/h with recommendation: " + decision)
         traci.vehicle.setSpeed(vehicle, speed / 3.6)
@@ -26,23 +29,27 @@ def move_according_to_glosa(vehicle):
 def run_sim():
 
     thread = threading.Thread(target=plotter.plot_speed)
-    thread.start()
+    #thread.start()
 
     step = 0 # step in simulation count
     ttc = 0 # time to change (traffic light event)
     while traci.simulation.getMinExpectedNumber() > 0:
+        visualizer.clear_all_polylines()
+        vehicles = traci.vehicle.getIDList()
+        v2v_client.send_messages()
+        v2v_client.collect_messages()
 
         if(ttc <= 0): # handle traffic lights at intersection
             state, ttc = traffic_light_manager.get_current_phases()
             traci.trafficlight.setRedYellowGreenState('tli', state)
 
         if(step > 0 and step % 3 == 0): # handle vehicles following green light optimal speed advisory (glosa)
-            for vehicle in helper.get_super_vehicles():
+            for vehicle in helper.get_super_vehicles(vehicles):
                 move_according_to_glosa(vehicle)
 
-        if(step > 0):
+        if(step > 0 and 'super1' in vehicles):
             plot_data.append(traci.vehicle.getSpeed('super1'))
-            plotter.plot_queue.put(plot_data[:])  # add the data to the queue   
+            plotter.plot_queue.put(plot_data[:])  # add the data to the queue
 
         logger.printlog("Next traffic signal event in " + str(ttc) + "seconds.")       
 

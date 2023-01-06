@@ -4,10 +4,10 @@ import math
 from api.output import logger
 
 
-def get_super_vehicles(): # returns list of all active super vehicles (vehicles that should be influenced by glosa and other vehicle information)
+def get_super_vehicles(vehicles): # returns list of all active super vehicles (vehicles that should be influenced by glosa and other vehicle information)
     super_vehicles = []
 
-    for vehicle in traci.vehicle.getIDList():
+    for vehicle in vehicles:
         if vehicle.startswith("super"):
             super_vehicles.append(vehicle)
 
