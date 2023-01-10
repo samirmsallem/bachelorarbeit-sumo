@@ -1,14 +1,13 @@
-import threading
+from pyexpat.errors import messages
 from api.sim import visualizer
 
 class SharedInformationSpace:
     def __init__(self):
         self.messages = []
-        self.lock = threading.Lock()
     
     def write(self, time, sender, receivers, signal, data):
-        with self.lock:
-            for receiver in receivers:
+        for receiver in receivers:
+            if not any(message[1] == sender and message[2] == receiver and message[3] == signal for message in self.messages):
                 self.messages.append((time, sender, receiver, signal, data)) 
                 # time of type simulation step; 
                 # sender of type simulation vehicle id; 
@@ -18,11 +17,9 @@ class SharedInformationSpace:
                 visualizer.create_vehicle_polyline(sender, receiver)
     
     def read(self, receiver):
-        with self.lock:
-            messages = []
-            for message in self.messages:
-                if message[2] == receiver:
-                    messages.append(message)
-                    self.messages.remove(message)
-            return messages
+        messages = []
+        for message in self.messages:
+            if message[2] == receiver:
+                messages.append(message)
+        return messages
 
