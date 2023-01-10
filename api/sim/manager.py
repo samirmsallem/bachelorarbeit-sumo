@@ -11,20 +11,6 @@ from api.sim import visualizer
 
 plot_data = []
 
-def move_according_to_glosa(vehicle):
-    if(helper.vehicle_did_not_cross_intersection(vehicle)):
-        x, y = traci.vehicle.getPosition(vehicle)
-        lon, lat = traci.simulation.convertGeo(x, y)
-        angle = traci.vehicle.getAngle(vehicle)
-
-        speed, decision = glosa_manager.glosa_for_position(lat, lon, angle, 30)
-        visualizer.create_glosa_polyline(vehicle)
-        logger.printlog("###### Vehicle " + vehicle + " ######")
-        logger.printlog("Calculated speed: " + str(speed) + " km/h with recommendation: " + decision)
-        traci.vehicle.setSpeed(vehicle, speed / 3.6)
-    else:
-        traci.vehicle.setSpeed(vehicle, -1)
-
 
 def run_sim():
 
@@ -45,7 +31,7 @@ def run_sim():
 
         if(step > 0 and step % 3 == 0): # handle vehicles following green light optimal speed advisory (glosa)
             for vehicle in helper.get_super_vehicles(vehicles):
-                move_according_to_glosa(vehicle)
+                glosa_manager.move_according_to_glosa(vehicle)
 
         if(step > 0 and 'super1' in vehicles):
             plot_data.append(traci.vehicle.getSpeed('super1'))
