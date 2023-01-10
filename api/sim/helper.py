@@ -4,6 +4,10 @@ import math
 from api.output import logger
 
 
+def is_super_vehicle(vehicle):
+    return vehicle in get_super_vehicles(traci.vehicle.getIDList())
+
+
 def get_super_vehicles(vehicles): # returns list of all active super vehicles (vehicles that should be influenced by glosa and other vehicle information)
     super_vehicles = []
 

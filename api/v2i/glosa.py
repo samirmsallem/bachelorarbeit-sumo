@@ -8,6 +8,9 @@ from api.v2i import tli
 
 tli_store = tli.TrafficLightInformation()
 
+def parse_justification(justification):
+    return justification.replace("[Green]", "g").replace("Green", "g").replace("Red", "r").replace("->", "").replace(" ", "")
+
 
 def get_justification(glosa):
     return glosa["justification"]
@@ -25,6 +28,23 @@ def get_maximum_speed(glosa):
     return glosa["maximumSpeed"]
 
 
+def improve_vehicle_speed(receiver, distance_to_last_vehicle):
+    time, receiver, distance, glosa, signals = tli_store.read(receiver)
+    age = traci.simulation.getTime() - time
+
+    reason = parse_justification(get_justification(glosa))
+
+    if get_minimum_speed(glosa) < get_recommended_speed(glosa):
+        new_speed = distance_to_last_vehicle / time
+
+        if new_speed >= get_minimum_speed(glosa):
+            traci.vehicle.setSpeed(receiver, new_speed)
+            print(f"Reduced vehicle speed from {get_recommended_speed(glosa)} to {new_speed * 3.6}")
+
+    
+    
+
+
 def glosa_for_position(latitude, longitude, bearing, speed):
     response = client.perform_request(latitude, longitude, bearing, speed)
     
@@ -35,7 +55,7 @@ def glosa_for_position(latitude, longitude, bearing, speed):
 
 
 def move_according_to_glosa(vehicle):
-    if(helper.vehicle_did_not_cross_intersection(vehicle)):
+    if helper.vehicle_did_not_cross_intersection(vehicle):
         x, y = traci.vehicle.getPosition(vehicle)
         long, lat = traci.simulation.convertGeo(x, y)
         angle = traci.vehicle.getAngle(vehicle)

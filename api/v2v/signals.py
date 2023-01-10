@@ -4,8 +4,14 @@ import enum
 class Signal(enum.Enum):
     
     RED = 'Waiting at intersection' # it waits at an intersection
-    # goal: Vehicles equipped with GLOSA predictions can improve their speed forecast by using these signals.
+    # goal: Vehicles equipped with GLOSA predictions can improve their speed forecast by reading these signals.
 
+    TTG = 'Time to green' # it is a super vehicle (equipped with glosa information) and received a RED signal from a waiting vehicle
+    # goal: The vehicle received geo position data of a waiting vehicle, this data can be used in order to improve the glosa algorithm
+    #       To also give the sender vehicle a benefit, with this signal it will receive the TTG (time to green) until the signal turns green again
+    #       this information can be used to give the driver awarness of the upcoming phase.
+    #       This could also be useful if the vehicle is an autonoumus vehicle since it does not need to look at the signal head itself, if it knows when the traffic signal turns green
+    
     MOVE = 'Want to catch green wave' # it is driving behind a vehicle equipped with glosa
     # goal: better traffic flow by allowing more vehicles to pass intersection in time.
     #       e.g: GLOSA vehicle receives a recommendation of at least 30km/h. Normally it would now drive 30 km/h and cross intersection before turning red,
