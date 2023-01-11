@@ -4,9 +4,13 @@ from api.v2i import traffic_light as tli_helper
 from api.output import logger
 from api.sim import helper
 from api.v2i import tli
+from api.sim import visualizer
 
 
 tli_store = tli.TrafficLightInformation()
+
+influenced_vehicles = []
+
 
 def parse_justification(justification):
     return justification.replace("[Green]", "g").replace("Green", "g").replace("Red", "r").replace("->", "").replace(" ", "")
@@ -35,14 +39,21 @@ def improve_vehicle_speed(receiver, distance_to_last_vehicle):
     reason = parse_justification(get_justification(glosa))
 
     if get_minimum_speed(glosa) < get_recommended_speed(glosa):
-        new_speed = distance_to_last_vehicle / time
-
-        if new_speed >= get_minimum_speed(glosa):
-            traci.vehicle.setSpeed(receiver, new_speed)
-            print(f"Reduced vehicle speed from {get_recommended_speed(glosa)} to {new_speed * 3.6}")
-
+        if signals[0][0] == 'Red' and (signals[0][1] - age) >= 0:
+            ttg = signals[0][1] - age
+            green_end = signals[1][1] if len(signals) > 1 else 10
+            min_speed = distance_to_last_vehicle / (ttg + green_end)
+            max_speed = distance_to_last_vehicle / (ttg + 1 )
+            if max_speed * 3.6 > 50:
+                max_speed = 45 / 3.6
+            traci.vehicle.setSpeed(receiver, max_speed)
+            influenced_vehicles.append([receiver, min_speed, max_speed])
+            print(f"Reduced vehicle speed of {receiver} from {get_recommended_speed(glosa)} to {max_speed * 3.6}")
+            return ttg
     
-    
+
+def glosa_exists(vehicle):
+    return tli_store.read(vehicle) != None
 
 
 def glosa_for_position(latitude, longitude, bearing, speed):
@@ -56,6 +67,10 @@ def glosa_for_position(latitude, longitude, bearing, speed):
 
 def move_according_to_glosa(vehicle):
     if helper.vehicle_did_not_cross_intersection(vehicle):
+        if glosa_exists(vehicle):
+            tli_store.remove(vehicle)
+        else: 
+            visualizer.create_glosa_polyline(vehicle)
         x, y = traci.vehicle.getPosition(vehicle)
         long, lat = traci.simulation.convertGeo(x, y)
         angle = traci.vehicle.getAngle(vehicle)
@@ -64,9 +79,20 @@ def move_according_to_glosa(vehicle):
         tli_store.write(traci.simulation.getTime(), vehicle, distance, glosa, signals)
         speed = get_recommended_speed(glosa)
         decision = get_justification(glosa)
-        logger.printlog("###### Vehicle " + vehicle + " ######")
-        logger.printlog("Calculated speed: " + str(speed) + " km/h with recommendation: " + decision)
-        traci.vehicle.setSpeed(vehicle, speed / 3.6)
+        min_speed = get_minimum_speed(glosa)
+        max_speed = get_maximum_speed(glosa)
+
+        if not any(x[0] == vehicle for x in influenced_vehicles): 
+            logger.printlog("###### Vehicle " + vehicle + " ######")
+            logger.printlog("Calculated speed: " + str(speed) + " km/h with recommendation: " + decision)
+            traci.vehicle.setSpeed(vehicle, speed / 3.6)
+        else: 
+            for v in influenced_vehicles:
+                if v[0] == vehicle:
+                    if v[2] < min_speed or v[2] * 3.6 > max_speed:
+                        traci.vehicle.setSpeed(vehicle, speed / 3.6)
+                    break
+
     else:
         traci.vehicle.setSpeed(vehicle, -1) # give vehicle controls back to simulation if vehicle crossed intersection
     

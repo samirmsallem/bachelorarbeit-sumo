@@ -32,9 +32,12 @@ def collect_messages():
         messages = com.read(vid)
         if(len(messages) > 0):
             for message in messages:
-                if not any(signal[0] == vid and signal[1] == message[3] for signal in processed_messages):
+                if not any(signal[0] == vid and signal[1] == message[1] and signal[2] == message[3] for signal in processed_messages):
                     if message[3] == signals.Signal.RED:
                         if helper.is_super_vehicle(vid):
+                            if not glosa.glosa_exists(vid):
+                                com.messages.remove(message)
+                                continue
                             print(f"Enforcing signal {message[3]}: {message[1]} on timestep {message[0]} at position {message[4]}")
                             x, y = message[4]
                             ttg = glosa.improve_vehicle_speed(vid, traci.vehicle.getDrivingDistance2D(vid, x, y))
@@ -42,4 +45,4 @@ def collect_messages():
                     elif message[3] == signals.Signal.TTG:
                         print(f"Enforcing signal {message[3]}: {message[1]} on timestep {message[0]} with time-to-green: {message[4]}")
                     
-                    processed_messages.append([vid, message[3]])
+                    processed_messages.append([vid, message[1], message[3]])

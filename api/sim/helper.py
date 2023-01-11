@@ -12,7 +12,7 @@ def get_super_vehicles(vehicles): # returns list of all active super vehicles (v
     super_vehicles = []
 
     for vehicle in vehicles:
-        if vehicle.startswith("super"):
+        if vehicle.startswith("v2v2i"):
             super_vehicles.append(vehicle)
 
     return super_vehicles

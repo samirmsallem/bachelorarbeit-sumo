@@ -1,5 +1,3 @@
-from api.sim import visualizer
-
 class TrafficLightInformation:
     def __init__(self):
         self.informations = []
@@ -9,6 +7,11 @@ class TrafficLightInformation:
         for tli_info in self.informations:
             if tli_info[1] == receiver:
                 return tli_info
+
+    def remove(self, receiver):
+        for tli_info in self.informations:
+            if tli_info[1] == receiver:
+                self.informations.remove(tli_info)
     
     def write(self, time, receiver, distance, glosa, signals):
         old_message = self.read(receiver)
@@ -21,5 +24,4 @@ class TrafficLightInformation:
         # distance of type decimal;
         # glosa of type glosa json;
         # signals of type List [[bulbColor, timeToChange, confidence]]
-        visualizer.create_glosa_polyline(receiver)
 

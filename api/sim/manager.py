@@ -15,7 +15,7 @@ plot_data = []
 def run_sim():
 
     thread = threading.Thread(target=plotter.plot_speed)
-    #thread.start()
+    thread.start()
 
     step = 0 # step in simulation count
     ttc = 0 # time to change (traffic light event)
@@ -33,8 +33,8 @@ def run_sim():
             for vehicle in helper.get_super_vehicles(vehicles):
                 glosa_manager.move_according_to_glosa(vehicle)
 
-        if(step > 0 and 'super1' in vehicles):
-            plot_data.append(traci.vehicle.getSpeed('super1'))
+        if(step > 0 and 'v2v2i.0' in vehicles):
+            plot_data.append(traci.vehicle.getSpeed('v2v2i.0'))
             plotter.plot_queue.put(plot_data[:])  # add the data to the queue
 
         logger.printlog("Next traffic signal event in " + str(ttc) + "seconds.")       
