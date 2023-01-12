@@ -14,7 +14,7 @@ def detect_vehicles_waiting_for_turn():
     vehicle_ids = traci.vehicle.getIDList()
 
     for vehicle in vehicle_ids:
-        if traci.vehicle.getRoute(vehicle) == 'approach3_left' and traci.vehicle.getWaitingTime(vehicle) > 0 and traci.vehicle.getNeighbors(vehicle, 1) == 0:
+        if traci.vehicle.getRoute(vehicle) == 'approach3_left' and traci.vehicle.getWaitingTime(vehicle) > 0 and traci.vehicle.getNeighbors(vehicle, 3) == 0:
             oncoming_traffic = traci.edge.getLastStepVehicleIDs('approach_2')
             for oncoming_vehicle in oncoming_traffic:
                 if helper.is_super_vehicle(oncoming_vehicle):
@@ -35,7 +35,7 @@ def detect_slowed_down_vehicles():
 
     for vehicle in vehicle_ids:
         if traci.vehicle.getSpeed(vehicle) < 45 / 3.6:
-            neighbors = traci.vehicle.getNeighbors(vehicle, 1)
+            neighbors = traci.vehicle.getNeighbors(vehicle, 3)
 
             if len(neighbors) > 0:
                 nearest_leading_vehicle_id = neighbors[0][0]

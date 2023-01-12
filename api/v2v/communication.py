@@ -60,19 +60,19 @@ def collect_messages():
                             if not glosa.glosa_exists(vid):
                                 com.messages.remove(message)
                                 continue
-                            print(f"Enforcing signal {message[3]}: {message[1]} on timestep {message[0]} at position {message[4]}")
+                            print(f"{message[1]} -> {vid} at {message[0]}: {message[3]} at position {message[4]}")
                             x, y = message[4]
                             ttg = glosa.improve_vehicle_speed(vid, traci.vehicle.getDrivingDistance2D(vid, x, y))
                             com.write(traci.simulation.getTime(), vid, [message[1]], signals.Signal.TTG, ttg)
                     elif message[3] == signals.Signal.TTG:
-                        print(f"Enforcing signal {message[3]}: {message[1]} on timestep {message[0]} with time-to-green: {message[4]}")
+                        print(f"{message[1]} -> {vid} at {message[0]}: {message[3]} with time-to-green: {message[4]}")
                     elif message[3] == signals.Signal.MOVE:
                         if not any(entry[2] == signals.Signal.RED and entry[1] == vid for entry in processed_messages):
-                            print(f"Enforcing signal {message[3]}: {message[1]} on timestep {message[0]}")
+                            print(f"{message[1]} -> {vid} at {message[0]}: {message[3]}")
                             new_speed = glosa.get_maximum_speed(glosa.tli_store.read(vid))
                             print(f"{vid}: Speeding up to {new_speed} km/h to allow behind vehicles to cross intersection.")
                             traci.vehicle.setSpeed(vid, new_speed / 3.6)
                     elif message[3] == signals.Signal.TURN:
-                        print(f"Enforcing signal {message[3]}: {message[1]} on timestep {message[0]}")
+                        print(f"{message[1]} -> {vid} at {message[0]}: {message[3]}")
                     
                     processed_messages.append([vid, message[1], message[3]])

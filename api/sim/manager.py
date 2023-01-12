@@ -28,6 +28,7 @@ def run_sim():
         if(ttc <= 0): # handle traffic lights at intersection
             state, ttc = traffic_light_manager.get_current_phases()
             traci.trafficlight.setRedYellowGreenState('tli', state)
+            print(f"TLI at intersection changed! Next event in {ttc}s")
 
         if(step > 0 and step % 3 == 0): # handle vehicles following green light optimal speed advisory (glosa)
             for vehicle in helper.get_super_vehicles(vehicles):
@@ -50,5 +51,5 @@ def run_sim():
 
 def start_simulation(sumo_binary, sumo_config_file):
     '''Starts the Sumo simulation using the provided sumo config file in TraCI'''
-    traci.start([sumo_binary, "-c", sumo_config_file])
+    traci.start([sumo_binary, "-c", sumo_config_file, "--start"])
     run_sim()

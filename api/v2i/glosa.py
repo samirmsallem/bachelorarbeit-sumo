@@ -49,12 +49,12 @@ def improve_vehicle_speed(receiver, distance_to_last_vehicle):
             ttg = signals[0][1] - age
             green_end = signals[1][1] if len(signals) > 1 else 10
             min_speed = distance_to_last_vehicle / (ttg + green_end)
-            max_speed = distance_to_last_vehicle / (ttg + 1 )
+            max_speed = distance_to_last_vehicle / (ttg + 1)
             if max_speed * 3.6 > 50:
                 max_speed = 45 / 3.6
             traci.vehicle.setSpeed(receiver, max_speed)
             influenced_vehicles.append([receiver, min_speed, max_speed])
-            print(f"Reduced vehicle speed of {receiver} from {get_recommended_speed(glosa)} to {max_speed * 3.6}")
+            print(f"Changed vehicle speed of {receiver} from {get_recommended_speed(glosa)} km/h to {max_speed * 3.6} km/h")
             return ttg
     
 
@@ -68,7 +68,7 @@ def glosa_for_position(latitude, longitude, bearing, speed):
     response = client.perform_request(latitude, longitude, bearing, speed)
     
     if(response == None or response["signals"] == None or response["signals"][0]["glosa"] == None):
-        return glosa_for_position(latitude, longitude, bearing, speed)
+        return [None, None, None]
         
     return [response["signals"][0]["glosa"], response["distanceToStopLine"], tli_helper.extract_tli(response["signals"])];
 
@@ -85,15 +85,19 @@ def move_according_to_glosa(vehicle):
         angle = traci.vehicle.getAngle(vehicle)
 
         glosa, distance, signals = glosa_for_position(lat, long, angle, 30)
-        tli_store.write(traci.simulation.getTime(), vehicle, distance, glosa, signals)
+
+        if glosa == None or distance == None or signals == None:
+            return 
+        
         speed = get_recommended_speed(glosa)
         decision = get_justification(glosa)
         min_speed = get_minimum_speed(glosa)
         max_speed = get_maximum_speed(glosa)
+        tli_store.write(traci.simulation.getTime(), vehicle, distance, glosa, signals)
 
         if not any(x[0] == vehicle for x in influenced_vehicles): 
-            logger.printlog("###### Vehicle " + vehicle + " ######")
-            logger.printlog("Calculated speed: " + str(speed) + " km/h with recommendation: " + decision)
+            print("###### GLOSA for vehicle " + vehicle + " ######")
+            print("Calculated speed: " + str(speed) + " km/h with recommendation: " + decision)
             traci.vehicle.setSpeed(vehicle, speed / 3.6)
         else: 
             for v in influenced_vehicles:
