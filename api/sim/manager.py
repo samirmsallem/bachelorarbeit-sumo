@@ -45,6 +45,10 @@ def run_sim():
         step += 1
         ttc -= 1
 
+        end_sequence()
+
+
+def end_sequence():
     traci.close()
     sys.stdout.flush()
 

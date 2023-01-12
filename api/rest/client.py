@@ -1,5 +1,10 @@
 import requests
 import sys
+import json
+
+OFFLINE_MODE = False
+
+response_msg = 0
 
 
 def perform_request(latitude, longitude, bearing, speed=50):
@@ -9,6 +14,9 @@ def perform_request(latitude, longitude, bearing, speed=50):
     Exemplary response can be found in /root/docs/backend_response.json
 
     '''
+
+    global response_msg
+
     url = "http://localhost:8080/api/predictions"
 
     headers = {
@@ -28,11 +36,27 @@ def perform_request(latitude, longitude, bearing, speed=50):
         response = requests.post(url, headers=headers, json=body)
 
         if response.status_code == 200:
-            return response.json()
-        else:
-            print("Request failed with status code: ", response.status_code, response.json())
-            return None
+            response_json = response.json()
 
-    except ConnectionError as e:
-       print(e.args[0].reason.errno) 
-       sys.exit("Unable to perform request to local backend")
+            if OFFLINE_MODE:
+                with open(f"api/rest/dump/{response_msg}.json", "w") as outfile:
+                    json.dump(response_json, outfile)
+                
+                response_msg += 1
+
+            return response_json
+
+        response.raise_for_status()
+
+    except requests.RequestException as e:
+        print(f"Unable to perform request to local backend, reason: {e}")
+        return previously_stored_response(response_msg)
+
+
+def previously_stored_response(response_msg):
+
+    with open(f"api/rest/dump/{response_msg}.json", "w", "r") as infile:
+        loaded_response = json.load(infile)
+    response_msg += 1
+
+    return loaded_response

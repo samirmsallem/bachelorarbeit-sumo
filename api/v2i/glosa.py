@@ -52,9 +52,21 @@ def improve_vehicle_speed(receiver, distance_to_last_vehicle):
             max_speed = distance_to_last_vehicle / (ttg + 1)
             if max_speed * 3.6 > 50:
                 max_speed = 45 / 3.6
-            traci.vehicle.setSpeed(receiver, max_speed)
+            current_speed = traci.vehicle.getSpeed(receiver) 
+            new_speed = 0
+
+            if min_speed < current_speed and current_speed < max_speed:
+                new_speed = current_speed
+            elif min_speed > current_speed:
+                new_speed = min_speed
+            elif current_speed > max_speed:
+                new_speed = max_speed
+            
+            traci.vehicle.setSpeed(receiver, new_speed)
+            print(f"Changed vehicle speed of {receiver} from {current_speed} km/h to {new_speed * 3.6} km/h")
+
             influenced_vehicles.append([receiver, min_speed, max_speed])
-            print(f"Changed vehicle speed of {receiver} from {get_recommended_speed(glosa)} km/h to {max_speed * 3.6} km/h")
+            
             return ttg
     
 
@@ -76,7 +88,7 @@ def glosa_for_position(latitude, longitude, bearing, speed):
 def move_according_to_glosa(vehicle):
     '''Moves a vehicle to the predicted glosa'''
     if helper.vehicle_did_not_cross_intersection(vehicle):
-        if glosa_exists(vehicle):
+        if glosa_exists(vehicle): # TODO think about letting vehicle get glosa only once
             tli_store.remove(vehicle)
         else: 
             visualizer.create_glosa_polyline(vehicle)
