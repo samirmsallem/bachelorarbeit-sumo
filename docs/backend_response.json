@@ -1,0 +1,33 @@
+{
+    "intersectionId": 1080, # id of the intersection
+    "approachId": 3, # id of the approach on the intersection
+    "name": "Schloßlände @ Schutterstraße",
+    "distanceToIntersection": 0.0, # distance to the intersection approach (since the vehicle is inside it will return 0)
+    "distanceToStopLine": 440.536200289113, # distance to the stop line (m)
+    "signals": [ # array of signal heads present at an intersection approach
+        {
+            "signalId": 1, # signal head id, important if multiple signal heads exist for one approach
+            "turnType": "Left_Straight", # turntype that indicates which turns the signal head controls
+            "bulbColor": "Green", # current bulb color of the signal head
+            "glosa": { # green light optimal speed advisory
+                "justification": "[Green] -> Red",  # justification for the glosa algorithm. []: indicates the aimed phase at which the algorithm predicts the vehicle to cross the intersection 
+                "minimumSpeed": 41, # minimum speed to cross intersection before red phase
+                "maximumSpeed": 50, # maximum speed to cross intersection (will be determined either by speed limit of the street and/or vehicles in front of the vehicle)
+                "recommendation": 41, # recommended speed that the car should actually drive (between min- and max-speed, while always trying to be as near as possible to the vehicles current speed to avoid heavy breaking or accelerating)
+                "speedLimit": 50 # speed limit on the street, delivered from google roads api
+            },
+            "predictions": [ # next signal phases on the approach
+                {
+                    "bulbColor": "Red", # next phase will be red
+                    "timeToChange": 38, # time to change -> phase will start in 38s
+                    "confidence": 93 # confidence level (between 0-100%) determines the assurance that this event will take place at this timestep
+                },
+                {
+                    "bulbColor": "Green", # after next phase will be green again
+                    "timeToChange": 76, # will start in 76s -> from this i can ascertain that red phase will have a duration of 38s, because it will start in 38s and after another 38s (38 + 38 = 76) the green phase will start again 
+                    "confidence": 90 # confidence level is slightly smaller than the previous one as the conditional probability determines that also the first event must take place 
+                }
+            ]
+        }
+    ]
+}

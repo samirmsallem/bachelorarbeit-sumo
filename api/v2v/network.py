@@ -1,12 +1,13 @@
 import traci
 from api.sim import helper
 
-'''
-detect vehicles that are waiting at an intersection approach
-preconditions: vehicle's speed is 0, vehicle did not cross intersection yet
-consequences: only vehicles waiting at an intersection will be returned
-'''
+
 def detect_waiting_vehicles():
+    '''
+    Detect vehicles that are waiting at an intersection approach
+    preconditions: vehicle's speed is 0, vehicle did not cross intersection yet
+    consequences: only vehicles waiting at an intersection will be returned
+    '''
     vehicle_ids = traci.vehicle.getIDList()
     waiting_vehicles = []
 
@@ -17,12 +18,12 @@ def detect_waiting_vehicles():
     return waiting_vehicles
 
 
-'''
-detect vehicles that are approaching an intersection behind a given vehicle
-preconditions: vehicles drive same route as provided vehicle, vehicles are moving, vehicles have driven less distance than provided vehicle (to ensure they are actually behind it)
-consequences: only vehicles driving the same route as provided vehicle will be returned
-'''
 def find_approaching_behind_vehicles(vehicle):
+    '''
+    Detect vehicles that are approaching an intersection behind a given vehicle
+    preconditions: vehicles drive same route as provided vehicle, vehicles are moving, vehicles have driven less distance than provided vehicle (to ensure they are actually behind it)
+    consequences: only vehicles driving the same route as provided vehicle will be returned
+    '''
     road_id = traci.vehicle.getRoadID(vehicle) # road the vehicle is currently on
     route = traci.vehicle.getRoute(vehicle) # route of the vehicle
     vehicle_pos = traci.vehicle.getLanePosition(vehicle) # distance the vehicle passed on the current road
@@ -54,6 +55,11 @@ def find_approaching_behind_vehicles(vehicle):
 
 
 def find_approaching_in_front_vehicles(vehicle):
+    '''
+    Detect vehicles that are approaching an intersection in front of a given vehicle
+    preconditions: vehicles drive same route as provided vehicle, vehicles are moving, vehicles have more distance than provided vehicle but did not cross the intersection yet
+    consequences: only vehicles driving the same route as provided vehicle will be returned
+    '''
     road_id = traci.vehicle.getRoadID(vehicle) # road the vehicle is currently on
     route = traci.vehicle.getRoute(vehicle) # route of the vehicle
     vehicle_pos = traci.vehicle.getLanePosition(vehicle) # distance the vehicle passed on the current road

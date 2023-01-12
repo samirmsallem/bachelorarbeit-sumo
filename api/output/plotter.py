@@ -6,7 +6,14 @@ from queue import Queue
 
 plot_queue = Queue()  
 
+
 def plot_fuel_consumption():
+    '''
+    Plots the fuel consumption of a vehicle in a line graph
+
+    x-axis: time-step (simulation time step)
+    y-axis: fuel consumption in liters 
+    '''
     started = False
     while True:
         data = plot_queue.get()  
@@ -16,7 +23,14 @@ def plot_fuel_consumption():
         offline.plot(fig, auto_open=(not started), filename='simulation-output/fuel-consumption.html')
         started = True
 
+
 def plot_speed():
+    '''
+    Plots the speed of a vehicle in a line graph
+
+    x-axis: time-step (simulation time step)
+    y-axis: vehicle speed in km/h
+    '''
     started = False
     while True:
         data = plot_queue.get()  

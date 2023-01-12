@@ -3,6 +3,12 @@ import sys
 
 
 def perform_request(latitude, longitude, bearing, speed=50):
+    '''
+    Restclient that will perform a post request to the local backend to receive information about the traffic light
+
+    Exemplary response can be found in /root/docs/backend_response.json
+
+    '''
     url = "http://localhost:8080/api/predictions"
 
     headers = {
@@ -14,7 +20,7 @@ def perform_request(latitude, longitude, bearing, speed=50):
         "longitude": longitude,
         "direction": bearing, 
         "currentSpeed": speed,
-        "considerTraffic": "false", # disabled as this would take the traffic information from the google api (not reliable in simulation)
+        "considerTraffic": "false", # disabled as this would take the traffic information from the google api (not reliable/reproducable in simulation)
         "asTurns": "false"
     }
 

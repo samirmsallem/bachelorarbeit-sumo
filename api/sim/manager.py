@@ -13,7 +13,7 @@ plot_data = []
 
 
 def run_sim():
-
+    '''Main function that performs simulation steps and executes the v2i and v2v logic'''
     thread = threading.Thread(target=plotter.plot_speed)
     thread.start()
 
@@ -48,7 +48,7 @@ def run_sim():
     sys.stdout.flush()
 
 
-
 def start_simulation(sumo_binary, sumo_config_file):
+    '''Starts the Sumo simulation using the provided sumo config file in TraCI'''
     traci.start([sumo_binary, "-c", sumo_config_file])
     run_sim()

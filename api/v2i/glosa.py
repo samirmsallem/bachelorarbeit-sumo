@@ -13,26 +13,32 @@ influenced_vehicles = []
 
 
 def parse_justification(justification):
+    '''Parses the justification (reason for glosa decision based on signal head phases) into a simple character list'''
     return justification.replace("[Green]", "g").replace("Green", "g").replace("Red", "r").replace("->", "").replace(" ", "")
 
 
 def get_justification(glosa):
+    '''Returns the justification of the provided glosa object'''
     return glosa["justification"]
 
 
 def get_recommended_speed(glosa):
+    '''Returns the recommended speed of the provided glosa object'''
     return glosa["recommendation"]
 
 
 def get_minimum_speed(glosa):
+    '''Returns the minimum speed of the provided glosa object'''
     return glosa["minimumSpeed"]
 
 
 def get_maximum_speed(glosa):
+    '''Returns the maximum speed of the provided glosa object'''
     return glosa["maximumSpeed"]
 
 
 def improve_vehicle_speed(receiver, distance_to_last_vehicle):
+    '''Improves the vehicle speed of a glosa influenced vehicle based on received vehicle positions (based on v2v communication)'''
     time, receiver, distance, glosa, signals = tli_store.read(receiver)
     age = traci.simulation.getTime() - time
 
@@ -53,10 +59,12 @@ def improve_vehicle_speed(receiver, distance_to_last_vehicle):
     
 
 def glosa_exists(vehicle):
+    '''Checks whether the provided vehicle has requests the glosa already'''
     return tli_store.read(vehicle) != None
 
 
 def glosa_for_position(latitude, longitude, bearing, speed):
+    '''Returns the GLOSA for a provided position and speed'''
     response = client.perform_request(latitude, longitude, bearing, speed)
     
     if(response == None or response["signals"] == None or response["signals"][0]["glosa"] == None):
@@ -66,6 +74,7 @@ def glosa_for_position(latitude, longitude, bearing, speed):
 
 
 def move_according_to_glosa(vehicle):
+    '''Moves a vehicle to the predicted glosa'''
     if helper.vehicle_did_not_cross_intersection(vehicle):
         if glosa_exists(vehicle):
             tli_store.remove(vehicle)

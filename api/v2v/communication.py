@@ -7,10 +7,8 @@ com = sis.SharedInformationSpace()
 
 processed_messages = []
 
-'''
-Alerting subsequent vehicles about own waiting state by providing RED signal from signals.py and geoposition
-'''
 def send_alert_messages():
+    '''Alerting subsequent vehicles about own waiting state by providing RED signal from signals.py and geoposition'''
     waiting_vehicles = network.detect_waiting_vehicles()
 
     if(len(waiting_vehicles) > 0):
@@ -21,11 +19,17 @@ def send_alert_messages():
 
 
 def send_messages():
+    '''Collection of all possible messages that are sendable, each function call will determine which vehicle should be adressed and will then get notified'''
     send_alert_messages()
     
 
 
 def collect_messages():
+    '''
+    Reads all messages inside the Shared Information Space and handle the signals according to their function
+    
+    Each signal has its own functionality that will get checked and then executed
+    '''
     vehicle_ids = traci.vehicle.getIDList()
     
     for vid in vehicle_ids:
