@@ -2,6 +2,50 @@ import traci
 from api.sim import helper
 
 
+def detect_vehicles_waiting_for_turn():
+    '''
+    Detect vehicles that are waiting to perform a left turn at an intersection but are blocked by forthcoming traffic
+    The goal is that if a vehicle fitting this description exists, to find a super vehicle on the forthcoming traffic side, that could prioritize this vehicle by letting it pass (giving way to the oncoming traffic)
+    This should have the effect of a better traffic flow.
+    preconditions: vehicle's speed is 0, vehicle is somewhere around the stop line, vehicle has no vehicles in front of it, tli is green
+    consequences: only vehicles waiting at an intersection will be returned
+    returns: [waiting vehicle id, super vehicle to adress]
+    '''
+    vehicle_ids = traci.vehicle.getIDList()
+
+    for vehicle in vehicle_ids:
+        if traci.vehicle.getRoute(vehicle) == 'approach3_left' and traci.vehicle.getWaitingTime(vehicle) > 0 and traci.vehicle.getNeighbors(vehicle, 1) == 0:
+            oncoming_traffic = traci.edge.getLastStepVehicleIDs('approach_2')
+            for oncoming_vehicle in oncoming_traffic:
+                if helper.is_super_vehicle(oncoming_vehicle):
+                    return [vehicle, oncoming_vehicle]
+    
+    return [None, None]
+
+
+def detect_slowed_down_vehicles():
+    '''
+    Detect vehicles that are slowed down by leading super vehicles
+    preconditions: vehicle's speed is bigger than 0, vehicle did not cross intersection yet
+    consequences: only vehicles waiting at an intersection will be returned
+    returns: a list of [[slowed_down_vehicle_id, perpetrator]]
+    '''
+    vehicle_ids = traci.vehicle.getIDList()
+    slowed_down_vehicles = []
+
+    for vehicle in vehicle_ids:
+        if traci.vehicle.getSpeed(vehicle) < 45 / 3.6:
+            neighbors = traci.vehicle.getNeighbors(vehicle, 1)
+
+            if len(neighbors) > 0:
+                nearest_leading_vehicle_id = neighbors[0][0]
+
+                if helper.is_super_vehicle(nearest_leading_vehicle_id):
+                    slowed_down_vehicles.append([vehicle, nearest_leading_vehicle_id])
+
+    return slowed_down_vehicles
+
+
 def detect_waiting_vehicles():
     '''
     Detect vehicles that are waiting at an intersection approach
@@ -20,7 +64,7 @@ def detect_waiting_vehicles():
 
 def find_approaching_behind_vehicles(vehicle):
     '''
-    Detect vehicles that are approaching an intersection behind a given vehicle
+    Detect super vehicles that are approaching an intersection behind a given vehicle
     preconditions: vehicles drive same route as provided vehicle, vehicles are moving, vehicles have driven less distance than provided vehicle (to ensure they are actually behind it)
     consequences: only vehicles driving the same route as provided vehicle will be returned
     '''
@@ -41,12 +85,12 @@ def find_approaching_behind_vehicles(vehicle):
                 if vid == vehicle:
                     continue # ignore own identity 
                 approaching_vehicle_pos = traci.vehicle.getLanePosition(vid)
-                if traci.vehicle.getSpeed(vid) > 0 and approaching_vehicle_pos < vehicle_pos and traci.vehicle.getRoute(vid) == route: # if vehicle speed > 0 and vehicle has driven less than sender vehicle and vehicles are driving same route, then add it to the list of receivers
+                if helper.is_super_vehicle(vid) and traci.vehicle.getSpeed(vid) > 0 and approaching_vehicle_pos < vehicle_pos and traci.vehicle.getRoute(vid) == route: # if vehicle speed > 0 and vehicle has driven less than sender vehicle and vehicles are driving same route, then add it to the list of receivers
                     approaching_behind_vehicles.append(vid)
             break
         else: # checking previous roads the vehicle already passed
             for vid in vehicles_on_edge:
-                if(traci.vehicle.getRoute(vid) == route): # add vehicle if its driving same direction as requester vehicle
+                if(helper.is_super_vehicle(vid) and traci.vehicle.getRoute(vid) == route): # add vehicle if its driving same direction as requester vehicle
                     approaching_behind_vehicles.append(vid)
             i += 1
 
@@ -56,7 +100,7 @@ def find_approaching_behind_vehicles(vehicle):
 
 def find_approaching_in_front_vehicles(vehicle):
     '''
-    Detect vehicles that are approaching an intersection in front of a given vehicle
+    Detect super vehicles that are approaching an intersection in front of a given vehicle
     preconditions: vehicles drive same route as provided vehicle, vehicles are moving, vehicles have more distance than provided vehicle but did not cross the intersection yet
     consequences: only vehicles driving the same route as provided vehicle will be returned
     '''
@@ -78,12 +122,12 @@ def find_approaching_in_front_vehicles(vehicle):
                 if vid == vehicle:
                     continue # skip own identity
                 approaching_vehicle_pos = traci.vehicle.getLanePosition(vid)
-                if approaching_vehicle_pos > vehicle_pos and traci.vehicle.getRoute(vid) == route: # if vehicle has driven more than requester vehicle -> in front of the vehicle
+                if helper.is_super_vehicle(vid) and approaching_vehicle_pos > vehicle_pos and traci.vehicle.getRoute(vid) == route: # if vehicle has driven more than requester vehicle -> in front of the vehicle
                     approaching_front_vehicles.append(vid)
             break
         else: # the edge is in front of the vehicle anyways
             for vid in vehicles_on_edge:
-                if(traci.vehicle.getRoute(vid) == route): # check if the vehicle will drive the same route, if yes add it
+                if(helper.is_super_vehicle(vid) and traci.vehicle.getRoute(vid) == route): # check if the vehicle will drive the same route, if yes add it
                     approaching_front_vehicles.append(vid)
             i += 1
 
