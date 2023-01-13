@@ -14,11 +14,15 @@ def detect_vehicles_waiting_for_turn():
     vehicle_ids = traci.vehicle.getIDList()
 
     for vehicle in vehicle_ids:
-        if traci.vehicle.getRoute(vehicle) == 'approach3_left' and traci.vehicle.getWaitingTime(vehicle) > 0 and traci.vehicle.getLeader(vehicle)[1] > 10:
+        if traci.vehicle.getRoute(vehicle) == traci.route.getEdges("approach3_left") and traci.vehicle.getWaitingTime(vehicle) > 0:
             oncoming_traffic = traci.edge.getLastStepVehicleIDs('approach_2')
-            for oncoming_vehicle in oncoming_traffic:
-                if helper.is_super_vehicle(oncoming_vehicle):
-                    return [vehicle, oncoming_vehicle]
+            current_lane = traci.vehicle.getLaneID(vehicle)
+            length = traci.lane.getLength(current_lane)
+            travelled = traci.vehicle.getLanePosition(vehicle)
+            if length - 10 < travelled:
+                for oncoming_vehicle in oncoming_traffic:
+                    if helper.is_super_vehicle(oncoming_vehicle):
+                        return [vehicle, oncoming_vehicle]
     
     return [None, None]
 
@@ -34,10 +38,11 @@ def detect_slowed_down_vehicles():
     slowed_down_vehicles = []
 
     for vehicle in vehicle_ids:
-        if traci.vehicle.getSpeed(vehicle) < 45 / 3.6:
-            info = traci.vehicle.getLeader(vehicle)
-            if info != None and info[1] < 20 and helper.is_super_vehicle(info[0]):
-                slowed_down_vehicles.append([vehicle, info[0]])
+        if traci.vehicle.getSpeed(vehicle) < 40 / 3.6:
+            super_vehicles_infront = find_approaching_in_front_vehicles(vehicle)
+            if super_vehicles_infront != None:
+                for sup in super_vehicles_infront:
+                    slowed_down_vehicles.append([vehicle, sup])
 
     return slowed_down_vehicles
 
@@ -104,7 +109,7 @@ def find_approaching_in_front_vehicles(vehicle):
     route = traci.vehicle.getRoute(vehicle) # route of the vehicle
     vehicle_pos = traci.vehicle.getLanePosition(vehicle) # distance the vehicle passed on the current road
 
-    current_road_index = route.index(road_id) # index of the road the vehicle is currently on
+    current_road_index = helper.get_route_road_index(route, road_id) # index of the road the vehicle is currently on
     approach_index = helper.get_approach_road_index(route) # index of the intersection approach
     i = current_road_index
 

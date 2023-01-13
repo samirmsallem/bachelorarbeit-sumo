@@ -4,6 +4,8 @@ import json
 
 OFFLINE_MODE = True
 STORE = False
+scenario = "scenario2" # possible scenarios: 1,2,3     start 2 with move_signal_enabled = True in communication.py
+                       # start 3 with turn_signal_enabled = True in communication.py
 
 response_msg = 0
 
@@ -43,7 +45,7 @@ def perform_request(latitude, longitude, bearing, speed=50):
             response_json = response.json()
 
             if STORE:
-                with open(f"api/rest/scenario1/{response_msg}.json", "w") as outfile:
+                with open(f"api/rest/{scenario}//{response_msg}.json", "w") as outfile:
                     json.dump(response_json, outfile)
                 
                 response_msg += 1
@@ -60,10 +62,10 @@ def perform_request(latitude, longitude, bearing, speed=50):
 def previously_stored_response():
     global response_msg
 
-    if response_msg == 73:
+    if (scenario == "scenario1" and response_msg == 73) or (scenario == "scenario2" and response_msg == 97) or (scenario == "scenario3" and response_msg == 75):
         sys.exit("Stored simulation ended!")
 
-    with open(f"api/rest/scenario1/{response_msg}.json", "r") as infile:
+    with open(f"api/rest/{scenario}/{response_msg}.json", "r") as infile:
         loaded_response = json.load(infile)
     
     response_msg += 1

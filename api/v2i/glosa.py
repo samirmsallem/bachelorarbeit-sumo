@@ -106,7 +106,9 @@ def move_according_to_glosa(vehicle):
         long, lat = traci.simulation.convertGeo(x, y)
         angle = traci.vehicle.getAngle(vehicle)
 
-        glosa, distance, signals = glosa_for_position(lat, long, angle, 30)
+        current_speed = traci.vehicle.getSpeed(vehicle) * 3.6
+
+        glosa, distance, signals = glosa_for_position(lat, long, angle,  current_speed if current_speed > 15 else 30)
 
         if glosa == None or distance == None or signals == None:
             return 

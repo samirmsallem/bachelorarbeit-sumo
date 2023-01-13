@@ -20,6 +20,18 @@ def get_super_vehicles(vehicles):
     return super_vehicles
 
 
+def get_route_road_index(vehicle_route, searchstring):
+    '''Returns the index (on a route) of the given road'''
+    approach_route_index = 0
+    
+    for i, road in enumerate(vehicle_route): # iterate over route array to find edge matching regex, regex is necessary because this is done for all vehicles driving on approach_1,2,3
+        match = re.finditer(searchstring, road)
+        for m in match:
+            approach_route_index = i # get the index of the intersection approach
+
+    return approach_route_index
+
+
 def get_approach_road_index(vehicle_route):
     '''Returns the index (on a route) of the approach of the intersection (since the vehicle crosses multiple edges (lanes) it is necessary to determine which one is the approach lane)'''
     pattern = r'^approach_' # regex to find approach edges (edges starting with 'approach_')
