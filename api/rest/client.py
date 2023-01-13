@@ -2,7 +2,8 @@ import requests
 import sys
 import json
 
-OFFLINE_MODE = False
+OFFLINE_MODE = True
+STORE = False
 
 response_msg = 0
 
@@ -32,31 +33,39 @@ def perform_request(latitude, longitude, bearing, speed=50):
         "asTurns": "false"
     }
 
+    if OFFLINE_MODE:
+        return previously_stored_response()
+
     try: 
         response = requests.post(url, headers=headers, json=body)
 
         if response.status_code == 200:
             response_json = response.json()
 
-            if OFFLINE_MODE:
-                with open(f"api/rest/dump/{response_msg}.json", "w") as outfile:
+            if STORE:
+                with open(f"api/rest/scenario1/{response_msg}.json", "w") as outfile:
                     json.dump(response_json, outfile)
                 
                 response_msg += 1
 
             return response_json
+        
+        else:
+            return None
 
-        response.raise_for_status()
-
-    except requests.RequestException as e:
-        print(f"Unable to perform request to local backend, reason: {e}")
-        return previously_stored_response(response_msg)
+    except requests.RequestException:
+        sys.exit("Unable to perform request to local backend")
 
 
-def previously_stored_response(response_msg):
+def previously_stored_response():
+    global response_msg
 
-    with open(f"api/rest/dump/{response_msg}.json", "w", "r") as infile:
+    if response_msg == 73:
+        sys.exit("Stored simulation ended!")
+
+    with open(f"api/rest/scenario1/{response_msg}.json", "r") as infile:
         loaded_response = json.load(infile)
+    
     response_msg += 1
 
     return loaded_response

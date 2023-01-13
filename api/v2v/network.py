@@ -35,9 +35,9 @@ def detect_slowed_down_vehicles():
 
     for vehicle in vehicle_ids:
         if traci.vehicle.getSpeed(vehicle) < 45 / 3.6:
-            leading_vehicle, distance = traci.vehicle.getLeader(vehicle)
-            if distance < 20 and helper.is_super_vehicle(leading_vehicle):
-                slowed_down_vehicles.append([vehicle, leading_vehicle])
+            info = traci.vehicle.getLeader(vehicle)
+            if info != None and info[1] < 20 and helper.is_super_vehicle(info[0]):
+                slowed_down_vehicles.append([vehicle, info[0]])
 
     return slowed_down_vehicles
 

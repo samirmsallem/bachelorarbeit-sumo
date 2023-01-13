@@ -62,7 +62,7 @@ def collect_messages():
                                 continue
                             print(f"{message[1]} -> {vid} at {message[0]}: {message[3]} at position {message[4]}")
                             x, y = message[4]
-                            ttg = glosa.improve_vehicle_speed(vid, traci.vehicle.getDrivingDistance2D(vid, x, y))
+                            ttg = glosa.improve_vehicle_speed(vid, message[1], traci.vehicle.getDrivingDistance2D(vid, x, y))
                             com.write(traci.simulation.getTime(), vid, [message[1]], signals.Signal.TTG, ttg)
                     elif message[3] == signals.Signal.TTG:
                         print(f"{message[1]} -> {vid} at {message[0]}: {message[3]} with time-to-green: {message[4]}")
