@@ -1,12 +1,20 @@
 # Bachelorarbeit
 
-Simulation zur Bachelorarbeit
+Umsetzung der praktischen Forschungsarbeit mit Python innerhalb der Simulationsumgebung "Simulation of Urban MObility" (SUMO).
 
 ## Allgemeines
 
 - Student: Samir Faycal Tahar M'Sallem
+- Angestrebter Abschluss: Bachelor of Science
 - Thema: Dynamische Geschwindigkeitsempfehlung auf Basis von “vehicle-to-infrastructure” Kommunikation unter Einfluss von kollektiver Intelligenz zwischen Fahrzeugen 
-- Abgabedatum: 
+- Abgabedatum: 27.02.2023
+- Referent: Prof. Dr. Seyed Eghbal Ghobadi
+- Korreferent: Moritz Schauer (M.Sc.)
+
+
+## Abstract
+
+Green Light Optimal Speed Advisory ("GLOSA") beschreibt eine Geschwindigkeitsempfehlung, die ein Fahrzeug befähigt die Grüne Welle zu befahren. Die Verfügbarkeit von Informationen aus der Umgebung ist der erfolgskritische Faktor, da diese die Genauigkeit dieser Empfehlung bestimmen. Ein vorher entwickelter "vehicle-to-infrastructure" ("V2I") Dienst, der mittels bekannter Ampelschaltzyklen diese Geschwindigkeit bestimmen kann, soll durch Einfluss anderer Verkehrsteilnehmer verbesserte Vorhersagen liefern. Konkret wird ein Fahrzeug-Netzwerk aufgebaut in dem Informationen ausgetauscht werden, sodass das Kollektiv befähigt ist, das übergeordnete Problem des hohen Verkehrsflusses zu lösen.
 
 
 ## Funktionsaufbau
@@ -18,10 +26,10 @@ Simulation zur Bachelorarbeit
 
 ### Informationen zur ausgewählten Kreuzung
 
-- Position: 48.762205483237224, 11.428698086287278
-- Intersection ID 1080: Schloßlände @ Schutterstraße
+- Es wurde eine Kreuzung ausgewählt, welche eine hohe Zuverlässigkeit hinsichtlich der Verfügbarkeit der Daten hat, sowie hinsichtlich der Datengenauigkeit (confidence level der Schaltzyklen)
 - https://goo.gl/maps/kb7ue8BfLkXTbvtM8
-- http://personalsignal.traffictechservices.de/Home/Intersection?scnr=1080&region=Ingolstadt&groupId=511 **(nicht öffentlich zugänglich)**
+- Position: 48.762205483237224, 11.428698086287278
+- Content Provider interne Bezeichnung: Intersection ID 1080: Schloßlände @ Schutterstraße
 - Approach 1 (links): latitude=48.76280618764156, longitude=11.427623411273599, direction=105.4492514593
 - Approach 2 (geradeaus): latitude=48.763513657462475, longitude=11.431514833553978, direction=235.909123032
 - Approach 3 (geradeaus, links): latitude=48.758733700993886, longitude=11.425519395220782, direction=40.2685517938
@@ -36,6 +44,7 @@ Simulation zur Bachelorarbeit
 simulation/
 ├─ README.md .............................. 
 ├─ launch.py .............................. # launchskript 
+├─ requirements.txt ....................... # Python Module und Libraries 
 ├─ api/ ................................... # programmcode 
 │  ├─ __init__.py ......................... 
 │  ├─ output/ ............................. # enthält alle relevanten funktionen zur ausgabe auf der konsole oder als graphen
@@ -87,3 +96,38 @@ simulation/
 </pre>
 
 
+### Installationshinweise
+
+- Getestet wurde die Umgebung auf MacOSX mit Python 3.9
+- SUMO Download und Installationshinweise: https://sumo.dlr.de/docs/Downloads.php
+- **Bitte die SUMO_HOME Variable setzen!**
+- Installierte SUMO Module: SUMO, SUMO-GUI, NETEDIT (zum Konfigurieren von `simulation/osm.net.xml.gz`)
+- Python Module installieren: `pip install -r requirements.txt`
+
+
+### Ausführung
+
+- Sofern SUMO, Sumo-gui und die Python Module installiert wurden kann das Launch-Skript mittels `python launch.py` gestartet werden
+- Der Befehl startet die SUMO Simulation mittels des "Traffic Control Interface" (TraCI) (https://sumo.dlr.de/docs/TraCI.html)
+- Die Anwedung sumo-gui sollte sich öffnen und die Simulation starten
+
+### Weitere Hinweise
+
+- Der Code in `/api` greift mittels der TraCI API auf die Simulation zu und kann Simulations-Variablen abrufen und verändern
+- TraCI baut eine Client-Server Architektur auf, wobei die Simulation als Server fungiert und der Code mittels des Clients ausgeführt wird
+- Über den Python Code kann das Backend aufgerufen werden, welches über Ampelinformationen verfügt, die dazu notwendigen Daten (Position, usw.) werden mittels TraCI aus der Simulation extrahiert
+- siehe: https://sumo.dlr.de/docs/TraCI/Vehicle_Value_Retrieval.html und https://sumo.dlr.de/docs/TraCI/Change_Vehicle_State.html sowie für Ampeln: https://sumo.dlr.de/docs/TraCI/Change_Traffic_Lights_State.html
+- Die Backend Response enthält die Geschwindigkeitsempfehlung, wonach dann die Fahrzeuge gesteuert werden
+- Sumo enthält von sich aus die Möglichkeit Fahrzeuge entsprechend von GLOSA bewegen zu lassen, da der Fokus auf der Nutzung von echten API Daten lag, wird diese Funktionalität nicht genutzt
+
+
+
+## Glossar
+
+Begriff  | Bezeichnung
+------------- | -------------
+GLOSA  | Green Light Optimal Speed Advisory
+V2V  | Vehicle-to-vehicle
+V2I  | Vehicle-to-infrastructure
+Approach  | Anfahrt, Zufahrt zu einer Ampel
+Shared Information Space  | Geteilter Informationsraum
