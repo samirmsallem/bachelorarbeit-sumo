@@ -8,8 +8,8 @@ Umsetzung der praktischen Forschungsarbeit mit Python innerhalb der Simulationsu
 - Angestrebter Abschluss: Bachelor of Science
 - Thema: Dynamische Geschwindigkeitsempfehlung auf Basis von “vehicle-to-infrastructure” Kommunikation unter Einfluss von kollektiver Intelligenz zwischen Fahrzeugen 
 - Abgabedatum: 27.02.2023
-- Referent: Prof. Dr. Seyed Eghbal Ghobadi
-- Korreferent: Moritz Schauer (M.Sc.)
+- Referent: Prof. Dr.-Ing. Seyed Eghbal Ghobadi
+- Korreferent: Moritz Schauer, M.Sc.
 
 
 ## Abstract
