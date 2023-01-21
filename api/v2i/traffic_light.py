@@ -2,7 +2,7 @@ from api.rest import client
 from api.output import logger
 
 
-def extract_tli(signals):
+def extract_tli(response):
     '''
     Extract current signal phases from the response json
 
@@ -12,6 +12,7 @@ def extract_tli(signals):
 
     -> Indicates that current phase is green and has a duration of 11s. This prediction is made with 97% probability. Next is red phase for 45s with 95% probability.
     '''
+    signals = response["signals"]
     phases = []
     count = len(signals[0]["predictions"])
     predictions = signals[0]["predictions"]
@@ -44,13 +45,13 @@ def get_approach_signal(approachId):
     '''
     if approachId == 1:
         logger.printlog("###### Approach 1 ######")
-        return extract_tli(client.perform_request(48.76280618764156, 11.427623411273599, 105.4492514593)["signals"])
+        return extract_tli(client.perform_request(48.76280618764156, 11.427623411273599, 105.4492514593))
     elif approachId == 2:
         logger.printlog("###### Approach 2 ######")
-        return extract_tli(client.perform_request(48.763513657462475, 11.431514833553978, 235.909123032)["signals"])
+        return extract_tli(client.perform_request(48.763513657462475, 11.431514833553978, 235.909123032))
     else:
         logger.printlog("###### Approach 3 ######")
-        return extract_tli(client.perform_request(48.758733700993886, 11.425519395220782, 40.2685517938)["signals"])
+        return extract_tli(client.perform_request(48.758733700993886, 11.425519395220782, 40.2685517938))
 
 
 def get_current_phases():

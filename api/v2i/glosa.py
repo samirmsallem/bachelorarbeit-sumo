@@ -92,7 +92,7 @@ def glosa_for_position(latitude, longitude, bearing, speed):
     if(response == None or response["signals"] == None or response["signals"][0]["glosa"] == None):
         return [None, None, None]
         
-    return [response["signals"][0]["glosa"], response["distanceToStopLine"], tli_helper.extract_tli(response["signals"])];
+    return [response["signals"][0]["glosa"], response["distanceToStopLine"], tli_helper.extract_tli(response)];
 
 
 def move_according_to_glosa(vehicle):
