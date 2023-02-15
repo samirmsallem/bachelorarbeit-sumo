@@ -58,5 +58,5 @@ def vehicle_did_not_cross_intersection(vehicle): # check whether vehicle crossed
         return False
     
     logger.printlog("Vehicle " + vehicle + "current: " + str(current_index) + " approach: " + str(approach_route_index) + " condition: " + str(current_index <= approach_route_index))
-    return current_index <= approach_route_index # if current position index is greater than intersection approach index -> vehicle crossed intersection
+    return current_index - 1 <= approach_route_index # if current position index is greater than intersection approach index -> vehicle crossed intersection
 
