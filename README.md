@@ -11,12 +11,6 @@ Umsetzung der praktischen Forschungsarbeit mit Python innerhalb der Simulationsu
 - Referent: Prof. Dr.-Ing. Seyed Eghbal Ghobadi
 - Korreferent: Moritz Schauer, M.Sc.
 
-
-## Abstract
-
-Green Light Optimal Speed Advisory ("GLOSA") beschreibt eine Geschwindigkeitsempfehlung, die ein Fahrzeug befähigt die Grüne Welle zu befahren. Die Verfügbarkeit von Informationen aus der Umgebung ist der erfolgskritische Faktor, da diese die Genauigkeit dieser Empfehlung bestimmen. Ein vorher entwickelter "vehicle-to-infrastructure" ("V2I") Dienst, der mittels bekannter Ampelschaltzyklen diese Geschwindigkeit bestimmen kann, soll durch Einfluss anderer Verkehrsteilnehmer verbesserte Vorhersagen liefern. Konkret wird ein Fahrzeug-Netzwerk aufgebaut in dem Informationen ausgetauscht werden, sodass das Kollektiv befähigt ist, das übergeordnete Problem des hohen Verkehrsflusses zu lösen.
-
-
 ## Funktionsaufbau
 
 ### Kommunikationsnetzwerk 
@@ -120,14 +114,3 @@ simulation/
 - Die Backend Response enthält die Geschwindigkeitsempfehlung, wonach dann die Fahrzeuge gesteuert werden
 - Sumo enthält von sich aus die Möglichkeit Fahrzeuge entsprechend von GLOSA bewegen zu lassen, da der Fokus auf der Nutzung von echten API Daten lag, wird diese Funktionalität nicht genutzt
 
-
-
-## Glossar
-
-Begriff  | Bezeichnung
-------------- | -------------
-GLOSA  | Green Light Optimal Speed Advisory
-V2V  | Vehicle-to-vehicle
-V2I  | Vehicle-to-infrastructure
-Approach  | Anfahrt, Zufahrt zu einer Ampel
-Shared Information Space  | Geteilter Informationsraum
