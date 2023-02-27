@@ -37,6 +37,8 @@ Umsetzung der praktischen Forschungsarbeit mit Python innerhalb der Simulationsu
 <pre>
 simulation/
 ├─ README.md .............................. 
+├─ projektbericht msallem.pdf ............. # Projektbericht der Projektphase
+├─ bachelorarbeit.pdf ..................... # Bachelorarbeit
 ├─ launch.py .............................. # launchskript 
 ├─ requirements.txt ....................... # Python Module und Libraries 
 ├─ api/ ................................... # programmcode 
